@@ -28,9 +28,11 @@ RM=rm -Rfv
 MKDIR=mkdir -p
 
 
-# .MAIN GLOBAL -> INSTALL
-# sudo make all
-# sudo make install
+# .MAIN GLOBAL -> INSTALL (stable)
+# sudo make all install
+
+# .MAIN GLOBAL -> TinyCC VM (unstable)
+# sudo make all tinycc install
 
 # .MAIN GLOBAL -> UNINSTALL
 # sudo make remove
@@ -38,7 +40,9 @@ MKDIR=mkdir -p
 
 
 # .START GLOBAL
-all: lua-lvm luax-shared-libs tinycc king-utils
+all: lua-lvm luax-shared-libs crown king-utils
+	
+crown:
 	$(INSTALL) $(COMPILER_SOURCE_DIR)/$(COMPILER_SOURCE_FILE) $(COMPILER)
 	$(PERMISSION) $(COMPILER)
 
