@@ -68,7 +68,7 @@ luax-shared-libs:
 
 king-utils:
 	$(RM) $(KING_BIN)
-	$(COMPILER) $(KING_PATH)
+	./$(COMPILER) $(KING_PATH)
 	$(INSTALL) $(KING_BIN) $(KING)
 	$(RM) $(KING_BIN)
 
