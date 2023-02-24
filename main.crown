@@ -1,0 +1,7 @@
+using crown
+using gcc
+
+fn main() -> int do
+    print("Hello world")
+    return 0
+end

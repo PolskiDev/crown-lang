@@ -1,0 +1,43 @@
+# EXECUTABLE BINARIES
+TINYCC=tcc
+COMPILER=crown
+
+# SOURCE DIRECTORIES AND SOURCE FILES
+TINYCC_SOURCE_DIR=tinycc
+COMPILER_SOURCE_DIR=src
+COMPILER_SOURCE_FILE=release.js
+
+# INSTALLATION PROCEDURES
+INSTALL=sudo cp -Rfv
+INSTALL_PATH=/usr/local/bin
+REMOVE=sudo rm -Rfv
+PERMISSION=sudo chmod +x
+
+
+# .MAIN GLOBAL -> INSTALL
+# sudo make all
+# sudo make install
+
+# .MAIN GLOBAL -> UNINSTALL
+# sudo make remove
+
+
+
+# .START GLOBAL
+all: interpreted tinycc-vm
+
+interpreted:
+	$(INSTALL) $(COMPILER_SOURCE_DIR)/$(COMPILER_SOURCE_FILE) $(COMPILER)
+	$(PERMISSION) $(COMPILER)
+
+tinycc-vm:
+	cd $(TINYCC_SOURCE_DIR) && ./configure
+	cd $(TINYCC_SOURCE_DIR) && sudo make
+	$(INSTALL) tinycc/$(TINYCC) $(TINYCC)
+
+install:
+	$(INSTALL) $(TINYCC) $(INSTALL_PATH)/$(TINYCC)
+	$(INSTALL) $(COMPILER) $(INSTALL_PATH)/$(COMPILER)
+remove:
+	$(REMOVE) $(INSTALL_PATH)/$(TINYCC)
+	$(REMOVE) $(INSTALL_PATH)/$(COMPILER)

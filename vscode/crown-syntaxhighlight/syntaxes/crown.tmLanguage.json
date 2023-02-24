@@ -1,0 +1,86 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Crown Programming Language",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numbers"
+		},
+        {
+            "include": "#storage"
+        }
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.crown",
+				"match": "\\b(if|elseif|else|while|for|do|return|break|fn|end|times|using|import|import_module|struct|endstruct|and|or|in|from|to|with|equals)\\b"
+			}]
+		},
+		"comments": {
+            "patterns": [{
+                "name": "comment.block.documentation.crown",
+                "begin": "#",
+                "beginCaptures": {
+                    "0": {
+                        "name": "punctuation.definition.comment.begin.crown"
+                    }
+                },
+                "end": "\n",
+                "endCaptures": {
+                    "0": {
+                        "name": "punctuation.definition.comment.end.crown"
+                    }
+                },
+                "patterns": [{
+                    "include": "#comments"
+            	}]
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.crown",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.crown",
+					"match": "\\\\."
+				}
+			]
+		},
+		"numbers": {
+            "patterns": [{
+                "name": "constant.numeric.exponential.crown",
+                "match": "([0-9]+(_?))+(\\.)([0-9]+[eE][-+]?[0-9]+)"
+            }, {
+                "name": "constant.numeric.float.crown",
+                "match": "([0-9]+(_?))+(\\.)([0-9]+)"
+            }, {
+                "name": "constant.numeric.binary.crown",
+                "match": "(?:0b)(?:(?:[0-1]+)(?:_?))+"
+            }, {
+                "name": "constant.numeric.octal.crown",
+                "match": "(?:0o)(?:(?:[0-7]+)(?:_?))+"
+            }, {
+                "name": "constant.numeric.hex.crown",
+                "match": "(?:0x)(?:(?:[0-9a-fA-F]+)(?:_?))+"
+            }, {
+                "name": "constant.numeric.integer.crown",
+                "match": "(?:(?:[0-9]+)(?:[_]?))+"
+            }]
+        },
+        "storage": {
+            "name": "storage.modifier.crown",
+            "match": "\\b(mathematical|int|float|String|char|bool|void|true|false|null|print|input|concatenate|is|isnot|not|and|or|main|gcc|clang|tinycc|tinycc_vm|debugging|crown|tokenizer|dump|File|openfile|closefile|Macro|io.write|io.read|ulong_int|long_int|long_float|fat|shift|drop|String.slice|String.lowercase|String.uppercase|String.substring|compiler|free|__tokenize|__initialize)\\b"
+        }
+	},
+	"scopeName": "source.crown"
+}

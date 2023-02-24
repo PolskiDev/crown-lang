@@ -1,0 +1,25 @@
+{
+    "name": "crown",
+    "displayName": "Crown",
+    "description": "Crown Programming Language",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.60.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "crown",
+            "aliases": ["Crown", "crown"],
+            "extensions": [".crown"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "crown",
+            "scopeName": "source.crown",
+            "path": "./syntaxes/crown.tmLanguage.json"
+        }]
+    }
+}

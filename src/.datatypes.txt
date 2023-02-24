@@ -1,0 +1,11 @@
+CROWN DATATYPES:
+    ulong_int   -> 0 ~ 4.294.967.295
+    long_int    -> -2.147.483.648 ~ 2.147.483.647
+    long_float  -> 3,4E-4932 ~ 3,4E+4932
+
+    int         -> -32.768 ~ 32.767
+    float       -> 3,4E-38 ~ 3.4E+38 
+    
+    String      -> -128	~ 127       (Standard/immutable string)
+    *String     -> -128 ~ 127       (Mutable string)
+    bool        -> 0 || 1
