@@ -13,6 +13,7 @@ let cc
 let cc_attr = ''
 let is_debugging = false
 let flag
+let outfile_lState
 let struct_name
 let COMPILERX_STDOUT_varname
 let COMPILERX_STDIN_varname
@@ -126,18 +127,35 @@ function __Compile() {
                 if (stack[i+1] == 'gcc') {
                     cc = 'gcc'
                     flag = '-o'
+                    outfile_lState = outfile.replace(".c","")
                 }
                 if (stack[i+1] == 'clang') {
                     cc = 'clang'
                     flag = '-o'
+                    outfile_lState = outfile.replace(".c","")
                 }
                 if (stack[i+1] == 'tinycc') {
                     cc = 'tcc'
                     flag = '-o'
+                    outfile_lState = outfile.replace(".c","")
                 }
                 if (stack[i+1] == 'tinycc_vm') {
                     cc = 'tcc'
                     flag = '-run'
+                    outfile_lState = outfile.replace(".c","")
+                }
+                if (stack[i+1] == 'lua') {
+                    if (process.platform === "darwin") {
+                        flag = '-I -L -llua -ldl -lm -shared -fpic -o'
+                        outfile_lState = outfile.replace(".c",".so")
+                    } else if (process.platform === "win32") {
+                        //flag = ''
+                        //outfile_lState = outfile.replace(".c",".dll")
+                    } else {
+                        // Linux
+                        flag = '-shared -fpic -o'
+                        outfile_lState = outfile.replace(".c",".so")
+                    }
                 }
                 if (stack[i+1] == 'static') {
                     cc_attr = '-static -m32'
@@ -219,7 +237,7 @@ size_t split_token(char *buffer, char *argv[], size_t argv_size) {
             }
             // End block
             if (stack[i] == 'end') {
-                fs.appendFileSync(outfile,'}\n')
+                fs.appendFileSync(outfile,'};\n')
                 //
                 
             }
@@ -368,6 +386,11 @@ size_t split_token(char *buffer, char *argv[], size_t argv_size) {
             if(stack[i] == 'import_module') {
                 let libname = stack[i+1]
                 fs.appendFileSync(outfile,tabl+`#include ${libname}\n`)
+            }
+            if(stack[i] == 'include') {
+                let libname = stack[i+1]
+                let unix_include_path = '/usr/local/lib/crown'
+                fs.appendFileSync(outfile,tabl+`#include "${unix_include_path}/${libname.slice(1,-1)}"\n`)
             }
 
             /*if (stack[i] == 'class') {
@@ -522,6 +545,12 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
                 funcname = funcname.replace('String.concat','strcat')
                 funcname = funcname.replace('String.slice','strtok')
 
+
+                
+                // System Shell
+                funcname = funcname.replace('System','system')
+
+
                 
                 if(funcname == '__tokenize') {
                     let file = COMPILERX_STDIN_varname
@@ -563,10 +592,10 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
                 let ContainsDo = stack[i+2]
 
                 // Novos operadores
-                expression = expression.replace(" is "," == ")
-                expression = expression.replace(" isnot "," != ")
-                expression = expression.replace(" and "," && ")
-                expression = expression.replace(" or "," || ")
+                expression = expression.replace(/ is /gi," == ")
+                expression = expression.replace(/ isnot /gi," != ")
+                expression = expression.replace(/ and /gi," && ")
+                expression = expression.replace(/ or /gi," || ")
 
                 if (ContainsDo == 'do') {
                     let res = `${tabl}if (${expression.slice(1,-1)})\n`
@@ -583,10 +612,10 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
                 let ContainsDo = stack[i+2]
 
                 // Novos operadores
-                expression = expression.replace(" is "," == ")
-                expression = expression.replace(" isnot "," != ")
-                expression = expression.replace(" and "," && ")
-                expression = expression.replace(" or "," || ")
+                expression = expression.replace(/ is /gi," == ")
+                expression = expression.replace(/ isnot /gi," != ")
+                expression = expression.replace(/ and /gi," && ")
+                expression = expression.replace(/ or /gi," || ")
 
 
                 if (ContainsDo != undefined) {
@@ -607,10 +636,10 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
                 let ContainsDo = stack[i+2]
 
                 // Novos operadores
-                expression = expression.replace(" is "," == ")
-                expression = expression.replace(" isnot "," != ")
-                expression = expression.replace(" and "," && ")
-                expression = expression.replace(" or "," || ")
+                expression = expression.replace(/ is /gi," == ")
+                expression = expression.replace(/ isnot /gi," != ")
+                expression = expression.replace(/ and /gi," && ")
+                expression = expression.replace(/ or /gi," || ")
 
 
                 if (ContainsDo != undefined) {
@@ -655,6 +684,23 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
             }
             if (stack[i] == 'endstruct') {
                 let res = `${tabl}} ${struct_name};\n\n`
+                fs.appendFileSync(outfile,res)
+            }
+
+            if (stack[i] == 'lua_Stack') {
+                let stackReg_name = stack[i+1]
+                let res = `static const struct luaL_Reg ${stackReg_name} [] = `
+                fs.appendFileSync(outfile,res)
+            }
+            if (stack[i] == 'lua_Reg') {
+                let luaReg_name = stack[i+1]
+                let res
+                if (luaReg_name != 'null') {
+                    res = `{ "${luaReg_name}", ${luaReg_name} },\n`
+                } else {
+                    res = `{ NULL, NULL }\n`
+                }
+                
                 fs.appendFileSync(outfile,res)
             }
 
@@ -789,8 +835,9 @@ for (i = 0; i < stackc; i++) `)
 }
 
 if (process.argv.length > 2) {
+    // enable "using debugging" for compiling tests - show *.c gencode.
     __Compile()
-    execSync(`${cc} ${outfile} ${flag} ${outfile.replace(".c","")} ${cc_attr}`)
+    execSync(`${cc} ${outfile} ${flag} ${outfile_lState} ${cc_attr}`)
     if (is_debugging == true) {
         // Nothing ...
     } else {

@@ -1,0 +1,48 @@
+using crown
+using gcc
+
+# "king --install http://www.example.com/header.h -o header.h"
+# "king --uninstall header.h"
+fn main() -> int do
+    *String global_path = "/usr/local/lib/crown"
+
+    equals argv[1] and "--install" do
+        equals argv[3] and "-o" do
+            #/usr/local/lib/crown
+            String i = "wget -O "
+            *String url = argv[2]
+            *String outname = argv[4]
+
+            # "wget -O lib.h http://www.exemplo.com/lib.h"
+            String.concat(i, outname)
+            String.concat(i, " ")
+            String.concat(i, url)
+
+            String j = "cp -Rfv "
+            String.concat(j,outname)
+            String.concat(j," ")
+            String.concat(j,global_path)
+            String.concat(j,"/")
+            String.concat(j,outname)
+
+            System(i)  # "WGet"
+            System(j)  # "Copy"
+        end
+    end
+    equals argv[1] and "--uninstall" do
+
+        String k[64] = "rm -Rfv "
+        *String libname = argv[2]
+
+        String.concat(k,global_path)
+        String.concat(k,"/")
+        String.concat(k,libname)
+        System(k)
+    end
+    equals argv[1] and "help" do
+        print("\n\n--- MANPAGE ---\nsudo king --install http://www.example.com/header.h -o header.h\n")
+        print("sudo king --uninstall header.h\n\n")
+    end
+
+    return 0
+end

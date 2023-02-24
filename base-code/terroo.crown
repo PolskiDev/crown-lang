@@ -1,0 +1,16 @@
+using crown
+using gcc
+using lua
+
+include "lua.h"
+include "lauxlib.h"
+
+fn helloworld(lua_State *L) -> int do
+    lua_pushstring(L, "Hello world")
+    return 1
+end
+lua_Stack lua_func do
+    lua_Reg helloworld
+    lua_Reg null
+end
+
