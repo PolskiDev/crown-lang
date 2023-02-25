@@ -25,6 +25,7 @@ Only if you are running on Linux (Ubuntu/Debian), paste this: `sudo make linux-n
 
 
 Unzip the downloaded folder and open inside it a terminal window.
+
 Then, paste the following command: `sudo make all install`
 
 To uninstall Crown, paste the following command: `sudo make remove`
