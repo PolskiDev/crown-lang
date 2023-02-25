@@ -9,7 +9,7 @@ fn main() -> int do
     equals argv[1] and "--install" do
         equals argv[3] and "-o" do
             #/usr/local/lib/crown
-            String i = "wget -O "
+            String i[2048] = "wget -O "
             *String url = argv[2]
             *String outname = argv[4]
 
@@ -18,7 +18,7 @@ fn main() -> int do
             String.concat(i, " ")
             String.concat(i, url)
 
-            String j = "cp -Rfv "
+            String j[2048] = "cp -Rfv "
             String.concat(j,outname)
             String.concat(j," ")
             String.concat(j,global_path)

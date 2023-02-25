@@ -4,6 +4,7 @@ COMPILER=crown
 LUA=lua
 LUAC=luac
 KING=king
+NODE=node
 
 #include <crown/lua>
 # SOURCE DIRECTORIES AND SOURCE FILES
@@ -18,6 +19,9 @@ LUACONF_LIB=luaconf.h
 LUALIBA_LIB=liblua.a
 KING_PATH=utils/$(KING).crown
 KING_BIN=utils/$(KING)
+DEFAULT_NODE_PATH=/bin/$(NODE)
+LINKED_NODE_PATH=/usr/local/bin/$(NODE)
+
 
 # INSTALLATION PROCEDURES
 INSTALL=sudo cp -Rfv
@@ -41,7 +45,9 @@ MKDIR=mkdir -p
 
 # .START GLOBAL
 all: lua-lvm luax-shared-libs crown king-utils
-	
+
+linux-node-link:
+	ln -s $(DEFAULT_NODE_PATH) $(LINKED_NODE_PATH)
 crown:
 	$(INSTALL) $(COMPILER_SOURCE_DIR)/$(COMPILER_SOURCE_FILE) $(COMPILER)
 	$(PERMISSION) $(COMPILER)
@@ -52,6 +58,10 @@ tinycc:
 	cd $(TINYCC_SOURCE_DIR) && sudo make
 	$(INSTALL) $(TINYCC_SOURCE_DIR)/$(TINYCC) $(TINYCC)
 	cd $(TINYCC_SOURCE_DIR) && $(RM) *.o
+
+tinycc-install:
+	$(INSTALL) $(TINYCC) $(INSTALL_PATH)/$(TINYCC)
+	
 
 lua-lvm:
 	cd $(LUA_SOURCE_DIR) && $(RM) *.o
@@ -68,13 +78,11 @@ luax-shared-libs:
 
 king-utils:
 	$(RM) $(KING_BIN)
-	$(COMPILER) $(KING_PATH)
+	./$(COMPILER) $(KING_PATH)
 	$(INSTALL) $(KING_BIN) $(KING)
 	$(RM) $(KING_BIN)
 
-
 install:
-	$(INSTALL) $(TINYCC) $(INSTALL_PATH)/$(TINYCC)
 	$(INSTALL) $(COMPILER) $(INSTALL_PATH)/$(COMPILER)
 	$(INSTALL) $(LUA) $(INSTALL_PATH)/$(LUA)
 	$(INSTALL) $(LUAC) $(INSTALL_PATH)/$(LUAC)

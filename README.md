@@ -21,6 +21,8 @@ First of all, install the dependencies: **Clang/LLVM, GCC, Node.js, NPM, GNU Mak
 
 Debian/Ubuntu: `sudo apt install clang gcc nodejs npm make wget`
 
+Only if you are running on Linux (Ubuntu/Debian), paste this: `sudo make linux-node-link`
+
 
 Unzip the downloaded folder and open inside it a terminal window.
 Then, paste the following command: `sudo make all install`

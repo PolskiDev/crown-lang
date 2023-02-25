@@ -158,7 +158,7 @@ function __Compile() {
                     }
                 }
                 if (stack[i+1] == 'static') {
-                    cc_attr = '-static -m32'
+                    flag = '-static -o'
                 }
                 if (stack[i+1] == 'debugging') {
                     is_debugging = true
@@ -837,7 +837,7 @@ for (i = 0; i < stackc; i++) `)
 if (process.argv.length > 2) {
     // enable "using debugging" for compiling tests - show *.c gencode.
     __Compile()
-    execSync(`${cc} ${outfile} ${flag} ${outfile_lState} ${cc_attr}`)
+    execSync(`${cc} ${outfile} ${flag} ${outfile_lState}`)
     if (is_debugging == true) {
         // Nothing ...
     } else {

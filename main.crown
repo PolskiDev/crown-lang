@@ -1,5 +1,6 @@
 using crown
 using gcc
+using static
 
 fn main() -> int do
     print("Hello world")
