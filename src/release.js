@@ -433,9 +433,29 @@ size_t split_token(char *buffer, char *argv[], size_t argv_size) {
                 fs.appendFileSync(outfile,tabl+`#include ${libname}\n`)
             }
             if(stack[i] == 'include') {
+                /**
+                 * sudo king --install http://www.w3c.com/thismodule.msk -o thismodule.msk
+                 * include "thismodule"
+                 *      SEARCH FOR:
+                 *          - /usr/local/lib/crown/thismodule.msk
+                 *          * Append to current file, all of it's content.
+                 *          * MSK is actually a *.c file with *.msk extension.
+                 * 
+                 *      ELSE:
+                 *          - #include "/usr/local/lib/crown/thismodule.h"
+                 *          * Add C relation to current file
+                 */
+
                 let libname = stack[i+1]
                 let unix_include_path = '/usr/local/lib/crown'
-                fs.appendFileSync(outfile,tabl+`#include "${unix_include_path}/${libname.slice(1,-1)}"\n`)
+
+                let module_msk = unix_include_path+'/'+libname.slice(1,-1)+'.msk'
+                if (fs.existsSync(module_msk)) {
+                    fs.appendFileSync(outfile,fs.readFileSync(module_msk))
+                } else {
+                    fs.appendFileSync(outfile,tabl+`#include "${unix_include_path}/${libname.slice(1,-1)}.h"\n`)
+                }
+                
             }
 
             /*if (stack[i] == 'class') {

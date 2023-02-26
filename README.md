@@ -54,4 +54,6 @@ To uninstall Crown on all operating systems, paste the following command:
 `sudo make remove`
   
   
+Available documentation inside `docs/Book.pdf`   
+    
 **Gabriel Margarido**
