@@ -25,8 +25,8 @@
 
 #define LUA_VERSION	"Lua " LUA_VERSION_MAJOR "." LUA_VERSION_MINOR
 #define LUA_RELEASE	LUA_VERSION "." LUA_VERSION_RELEASE
-#define LUA_COPYRIGHT	LUA_RELEASE "  Copyright (C) 1994-2022 Lua.org, PUC-Rio"
-#define LUA_AUTHORS	"R. Ierusalimschy, L. H. de Figueiredo, W. Celes"
+#define LUA_COPYRIGHT	LUA_RELEASE " (Crown Edition) - Copyright (C) 1994-2022 Lua.org, PUC-Rio"
+#define LUA_AUTHORS	"R. Ierusalimschy, L. H. de Figueiredo, W. Celes, Gabriel Margarido"
 
 
 /* mark for precompiled code ('<esc>Lua') */

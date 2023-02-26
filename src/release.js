@@ -1,5 +1,5 @@
 #!/usr/local/bin/node
-const { execSync } = require('child_process')
+const child_process = require('child_process')
 const fs = require('fs')
 const process = require('process')
 const crypto = require('crypto')
@@ -146,8 +146,10 @@ function __Compile() {
                 }
                 if (stack[i+1] == 'lua') {
                     if (process.platform === "darwin") {
-                        flag = '-I -L -llua -ldl -lm -shared -fpic -o'
+                        //flag = '-I -L -llua -ldl -lm -shared -fpic -o'
+                        flag = '-bundle -undefined dynamic_lookup -fpic -o'
                         outfile_lState = outfile.replace(".c",".so")
+
                     } else if (process.platform === "win32") {
                         //flag = ''
                         //outfile_lState = outfile.replace(".c",".dll")
@@ -268,6 +270,49 @@ size_t split_token(char *buffer, char *argv[], size_t argv_size) {
                     value = value.replace('String.len', 'strlen')
                     value = value.replace('String.lowercase','toLower')
                     value = value.replace('String.uppercase','toUpper')
+                    value = value.replace('String.reverse','strrev')
+
+
+                    /**
+                     *      # First mode
+                     *      *String a = "Hello world"
+                     *      *String b = String.assign(a)
+                     * 
+                     *      # Second mode
+                     *      String.assign(b,a)
+                     */
+                    value = value.replace('String.assign','strdup')
+                    
+                    
+                    /** String compare */
+                    /** EQUALS:
+                     * equals a and b do
+                     *      ...
+                     * elsequals b and c do
+                     *      ...
+                     * else
+                     *      ...
+                     * end
+                     * 
+                     * 
+                     * STRING.ISEQUAL:
+                     * 
+                     * *String e = String.isEqual(a,b)
+                     * *String d = String.isEqual(b,c)
+                     * 
+                     * if (e == true) {
+                     *      ...
+                     * } elseif (d == true) {
+                     *      ...
+                     * } else {
+                     *      ...
+                     * }
+                    */
+                    value = value.replace('String.isEqual','strcomp')
+                    value = value.replace('String.slice','strtok')
+
+                    
+
 
                     /** Additional arguments */
                     optional_parameter = stack[i+2]
@@ -543,13 +588,11 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
 
                 // String handling
                 funcname = funcname.replace('String.concat','strcat')
-                funcname = funcname.replace('String.slice','strtok')
+                funcname = funcname.replace('String.assign','strcpy') //Assign one string to another
 
-
-                
                 // System Shell
-                funcname = funcname.replace('System','system')
-
+                funcname = funcname.replace('System.execute','system')
+                
 
                 
                 if(funcname == '__tokenize') {
@@ -559,7 +602,7 @@ for(int i=${varname}_size-1;i>=pos_${anonymous_id};i--) {
                     let aux_buffer = "buffer_"+crypto.randomBytes(16).toString("hex");
                     fs.appendFileSync(outfile, `char* ${aux_buffer};\n`)
 
-                    let anonymous_id = crypto.randomBytes(16).toString("hex");
+                    //let anonymous_id = crypto.randomBytes(16).toString("hex");
                     args = `(${aux_buffer}, ${buffer}, argv)`
                 }
 
@@ -829,6 +872,17 @@ for (i = 0; i < stackc; i++) `)
                 let res = `${tabl}if (strcmp(${val1},${val2})==0)`
                 fs.appendFileSync(outfile,res)
             }
+            if(stack[i] == 'elsequals' && stack[i+2] == 'and') {
+                /*
+                equals stack[i] and if_tok do
+                    ...
+                end
+                */
+                let val1 = stack[i+1]
+                let val2 = stack[i+3]
+                let res = `${tabl}} else if (strcmp(${val1},${val2})==0)`
+                fs.appendFileSync(outfile,res)
+            }
         }
         //console.log(list)
     })
@@ -837,7 +891,7 @@ for (i = 0; i < stackc; i++) `)
 if (process.argv.length > 2) {
     // enable "using debugging" for compiling tests - show *.c gencode.
     __Compile()
-    execSync(`${cc} ${outfile} ${flag} ${outfile_lState}`)
+    child_process.execSync(`${cc} ${outfile} ${flag} ${outfile_lState}`)
     if (is_debugging == true) {
         // Nothing ...
     } else {

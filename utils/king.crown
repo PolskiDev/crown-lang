@@ -25,11 +25,11 @@ fn main() -> int do
             String.concat(j,"/")
             String.concat(j,outname)
 
-            System(i)  # "WGet"
-            System(j)  # "Copy"
+            System.execute(i)  # "WGet"
+            System.execute(j)  # "Copy"
         end
-    end
-    equals argv[1] and "--uninstall" do
+    
+    elsequals argv[1] and "--uninstall" do
 
         String k[64] = "rm -Rfv "
         *String libname = argv[2]
@@ -37,9 +37,9 @@ fn main() -> int do
         String.concat(k,global_path)
         String.concat(k,"/")
         String.concat(k,libname)
-        System(k)
-    end
-    equals argv[1] and "help" do
+        System.execute(k)
+    
+    elsequals argv[1] and NULL do
         print("\n\n--- MANPAGE ---\nsudo king --install http://www.example.com/header.h -o header.h\n")
         print("sudo king --uninstall header.h\n\n")
     end

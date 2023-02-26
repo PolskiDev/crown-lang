@@ -44,7 +44,7 @@ MKDIR=mkdir -p
 
 
 # .START GLOBAL
-all: lua-lvm luax-shared-libs crown king-utils
+all: clean lua-lvm luax-shared-libs crown king-utils
 
 linux-node-link:
 	ln -s $(DEFAULT_NODE_PATH) $(LINKED_NODE_PATH)
@@ -64,7 +64,7 @@ tinycc-install:
 	
 
 lua-lvm:
-	cd $(LUA_SOURCE_DIR) && $(RM) *.o
+	cd $(LUA_SOURCE_DIR) && $(RM) *.o liblua.a
 	cd $(LUA_SOURCE_DIR) && make all test
 	$(INSTALL) $(LUA_SOURCE_DIR)/$(LUA) $(LUA)
 	$(INSTALL) $(LUA_SOURCE_DIR)/$(LUAC) $(LUAC)
@@ -98,5 +98,7 @@ remove:
 	$(REMOVE) $(LUASTATE_LIB_DIR)/$(LUACONF_LIB)
 	$(REMOVE) $(INSTALL_PATH)/$(KING)
 
+clean:
+	$(RM) $(COMPILER) $(LUA) $(LUAC) $(KING) $(TINYCC)
 
-.PHONY: all lua-lvm tinycc luax-shared-libs king-utils install remove
+.PHONY: all lua-lvm tinycc luax-shared-libs king-utils install remove clean

@@ -22,7 +22,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.crown",
-				"match": "\\b(if|elseif|else|while|for|do|return|break|fn|end|times|using|import|import_module|struct|endstruct|and|or|in|from|to|with|equals|include|lua_Stack)\\b"
+				"match": "\\b(if|elseif|else|while|for|do|return|break|fn|end|times|using|import|import_module|struct|endstruct|and|or|in|from|to|with|equals|elsequals|include|lua_Stack)\\b"
 			}]
 		},
 		"comments": {
@@ -79,7 +79,7 @@
         },
         "storage": {
             "name": "storage.modifier.crown",
-            "match": "\\b(mathematical|int|float|String|char|bool|void|true|false|null|print|input|concatenate|is|isnot|not|and|or|main|lua|lua_State|static|gcc|clang|tinycc|tinycc_vm|debugging|crown|tokenizer|dump|File|openfile|closefile|Macro|io.write|io.read|ulong_int|long_int|long_float|fat|shift|drop|String.slice|String.lowercase|String.uppercase|String.substring|compiler|free|__tokenize|__initialize|lua_Reg|System|system)\\b"
+            "match": "\\b(mathematical|int|float|String|char|bool|void|true|false|null|NULL|print|input|concatenate|is|isnot|not|and|or|main|lua|lua_State|static|gcc|clang|tinycc|tinycc_vm|debugging|crown|tokenizer|dump|File|openfile|closefile|Macro|io.write|io.read|ulong_int|long_int|long_float|fat|shift|drop|String.slice|String.lowercase|String.uppercase|String.substring|compiler|free|__tokenize|__initialize|lua_Reg|System|system)\\b"
         }
 	},
 	"scopeName": "source.crown"
