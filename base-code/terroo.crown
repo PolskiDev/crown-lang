@@ -1,6 +1,7 @@
 using crown
 using gcc
 using lua
+using debugging
 
 include "lua.h"
 include "lauxlib.h"
@@ -9,8 +10,14 @@ fn helloworld(lua_State *L) -> int do
     lua_pushstring(L, "Hello world")
     return 1
 end
+fn write_helloworld(lua_State *L) -> int do
+    print("This is my Hello world!")
+    return 1
+end
+
 lua_Stack lua_func do
     lua_Reg helloworld
+    lua_Reg write_helloworld
     lua_Reg null
 end
 
