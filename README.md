@@ -19,21 +19,36 @@ Crown programming language compiles on pure ANSI-C, it means that all computers 
 
 First of all, install the dependencies: **Clang/LLVM, GCC, Node.js, NPM, GNU Make and Wget**.   
 
+- ### Linux
 Debian/Ubuntu: `sudo apt install clang gcc nodejs npm make wget`  
 Only if you are running on Linux (Ubuntu/Debian), paste this:   
 `sudo make linux-node-link`  
 
 
+Or try this, instead:  
+`sudo ln -s /bin/node /usr/local/bin/node`  
+
+
+- ### Apple MacOS X
 Install MacPorts first: [www.macports.org/install.php](https://www.macports.org/install.php)  
 Apple MacOS X: `sudo port install wget`  
 
+Then install Node.js and NPM: [www.nodejs.org](https://nodejs.org)
+
+- ### Build from sources
 
 Unzip the downloaded folder and open inside it a terminal window.
-Then, paste the following command (for Linux and Windows):  
-`sudo make all install`
+Then, paste the following command:
 
-If you're using Apple MacOS X, use this instead:  
+If you're using a Linux distro:  
+`sudo make all install USE=-DLUA_USE_LINUX`
+
+If you're using Apple MacOS X:  
 `sudo make all install USE=-DLUA_USE_MACOSX`
+
+If you're using Microsoft Windows:  
+`sudo make all install USE=-DLUA_USE_WINDOWS`
+
 
 To uninstall Crown on all operating systems, paste the following command:  
 `sudo make remove`
