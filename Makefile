@@ -64,7 +64,7 @@ tinycc-install:
 	
 
 lua-lvm:
-	cd $(LUA_SOURCE_DIR) && $(RM) *.o liblua.a
+	cd $(LUA_SOURCE_DIR) && $(RM) *.o $(LUALIBA_LIB)
 	cd $(LUA_SOURCE_DIR) && make all test
 	$(INSTALL) $(LUA_SOURCE_DIR)/$(LUA) $(LUA)
 	$(INSTALL) $(LUA_SOURCE_DIR)/$(LUAC) $(LUAC)
@@ -99,6 +99,6 @@ remove:
 	$(REMOVE) $(INSTALL_PATH)/$(KING)
 
 clean:
-	$(RM) $(COMPILER) $(LUA) $(LUAC) $(KING) $(TINYCC)
+	$(RM) $(COMPILER) $(LUA) $(LUAC) $(KING) $(TINYCC) $(LUA_SOURCE_DIR)/$(LUALIBA_LIB) $(LUA_SOURCE_DIR)/$(LUA) $(LUA_SOURCE_DIR)/$(LUAC)
 
 .PHONY: all lua-lvm tinycc luax-shared-libs king-utils install remove clean
